@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { userRoutes } from './src/routes';
- import { promptRoutes } from './src/routes/promptRoutes';
+ import  promptRoutes  from './src/routes/promptRoutes';
 import categoryRoutes from './src/routes/categoryRoutes';
 import subCategoryRoutes from './src/routes/subCategoryRoutes';
 const app = express();

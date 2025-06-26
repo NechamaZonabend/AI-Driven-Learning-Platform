@@ -62,8 +62,8 @@ export const createPrompt = async (promptData) => {
     return response.data;
 };
 
-export const getAllPrompts = async () => {
-    const response = await axios.get(`${API_URL}/prompts`);
+export const getAllPrompts = async (userId) => {
+    const response = await axios.get(`${API_URL}/prompts/user/${userId}`);
     return response.data;
 };
 

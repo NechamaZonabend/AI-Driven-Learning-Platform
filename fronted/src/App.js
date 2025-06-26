@@ -1,13 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// דוגמה ב-App.jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import PromptPage from './pages/PromptPage';
 
-const App = () => (
-    <Router>
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-        </Routes>
-    </Router>
-);
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/prompt" element={<PromptPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 export default App;

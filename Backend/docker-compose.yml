@@ -1,0 +1,22 @@
+services:
+  app:
+    image: node:20
+    container_name: mini-mvp-backend
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: node app.js
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+
+  db:
+    image: postgres:15
+    container_name: mini-mvp-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"

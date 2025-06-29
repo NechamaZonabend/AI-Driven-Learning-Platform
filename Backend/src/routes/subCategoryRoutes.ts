@@ -2,8 +2,8 @@ import { Router } from 'express';
 import {
   getAllSubCategories,
   createSubCategory,
-  getSubCategoryById,
-  deleteSubCategory
+  // getSubCategoryById,
+  // deleteSubCategory
 } from '../controllers/subCategoryController';
 
 const router = Router();

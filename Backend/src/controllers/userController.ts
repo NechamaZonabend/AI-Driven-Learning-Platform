@@ -1,5 +1,3 @@
-// backend/src/controllers/authController.ts
-
 import { Request, Response } from 'express';
 import { userService } from '../services/userService';
 import { CreateUserRequest, LoginRequest, ApiResponse } from '../backend_types';
@@ -13,7 +11,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-class AuthController {
+class userController {
   register = async (req: Request, res: Response): Promise<void> => {
     const userData: CreateUserRequest = req.body;
 
@@ -102,4 +100,4 @@ class AuthController {
 };
 }
 
-export const authController = new AuthController();
+export const UserController = new userController();

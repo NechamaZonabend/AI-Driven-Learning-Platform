@@ -4,6 +4,7 @@ export interface CreateUserRequest {
   name: string;
   phone: string;
   password: string;
+  role?: 'USER' | 'ADMIN';
 }
 
 export interface LoginRequest {

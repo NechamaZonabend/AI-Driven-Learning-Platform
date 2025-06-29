@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../config/database';
-import config from '../config/config';
 import { logger } from '../utils/logger';
 import { CreateUserRequest, LoginRequest, AuthResponse } from '../backend_types';
 
@@ -16,6 +15,14 @@ class UserService {
         throw new Error('User with this phone number already exists');
       }
 
+       //  If trying to register as admin, check if an admin already exists     
+         if (userData.role === 'ADMIN') {
+        const existingAdmin = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
+        if (existingAdmin) {
+          throw new Error('An admin already exists in the system');
+        }
+      }
+
       // Hash password
       const hashedPassword = await bcrypt.hash(userData.password, 12);
 
@@ -24,7 +31,8 @@ class UserService {
         data: {
           name: userData.name,
           phone: userData.phone,
-          password: hashedPassword // ← שמור את הסיסמה המוצפנת!
+          password: hashedPassword,
+          role: userData.role || 'USER', 
         },
         select: {
           id: true,
@@ -54,7 +62,7 @@ class UserService {
         throw new Error('Invalid phone number or password');
       }
 
-      // Verify password (השווה סיסמה, לא טלפון)
+      // Verify password
       const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
 
       if (!isPasswordValid) {
@@ -100,7 +108,17 @@ class UserService {
       throw error;
     }
   }
-
+async deleteUser(userId: number) {
+  try {
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+    return { success: true, message: 'User deleted successfully' };
+  } catch (error) {
+    logger.error('Error deleting user:', error);
+    throw error;
+  }
+}
   async getAllUsers(page: number = 1, limit: number = 10) {
     try {
       const skip = (page - 1) * limit;

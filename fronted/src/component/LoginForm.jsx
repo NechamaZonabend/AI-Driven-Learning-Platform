@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loginUser } from '../services/api';
+import '../App.css';
 
 const LoginForm = ({ onLogin, onShowRegister }) => {
     const [phone, setPhone] = useState('');
@@ -11,12 +12,14 @@ const LoginForm = ({ onLogin, onShowRegister }) => {
         try {
             const response = await loginUser({ phone, password });
             if (response.success) {
-                onLogin(true);
+                onLogin(true, response.data.user); 
+                console.log('user:', response.data);
+                // Here response.data is the user object from the server
             } else {
-                setError('משתמש לא נמצא במערכת');
+                setError('User not found');
             }
         } catch (err) {
-            setError('משתמש לא נמצא במערכת');
+            setError('User not found');
         }
     };
 
@@ -40,8 +43,18 @@ const LoginForm = ({ onLogin, onShowRegister }) => {
             {error && (
                 <div>
                     <p>{error}</p>
-                    <button type="button" onClick={onShowRegister} style={{ color: 'blue', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}>
-                        להרשמה
+                    <button
+                        type="button"
+                        onClick={onShowRegister}
+                        style={{
+                            color: 'blue',
+                            background: 'none',
+                            border: 'none',
+                            textDecoration: 'underline',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Register
                     </button>
                 </div>
             )}

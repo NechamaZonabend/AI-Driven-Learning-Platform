@@ -1,5 +1,3 @@
-// backend/src/services/categoryService.ts
-
 import { prisma } from '../config/database';
 import { logger } from '../utils/logger';
 

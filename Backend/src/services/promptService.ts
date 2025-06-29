@@ -6,7 +6,7 @@ import { CreatePromptRequest } from '../backend_types';
 class PromptService {
   async createPrompt(userId: number, promptData: CreatePromptRequest) {
     try {
-      // ודא שתת-הקטגוריה שייכת לקטגוריה
+        // Ensure the sub-category belongs
       const subCategory = await prisma.subCategory.findFirst({
         where: {
           id: promptData.subCategoryId,
@@ -21,14 +21,14 @@ class PromptService {
         throw new Error(`Sub-category with ID ${promptData.subCategoryId} does not exist for category ID ${promptData.categoryId}`);
       }
 
-      // קריאה ל-AI
+      // Call to AI
       const aiResponse = await aiService.generateLesson({
         prompt: promptData.prompt,
         category: subCategory.category.name,
         subCategory: subCategory.name,
       });
 
-      // שמירה במסד הנתונים
+      // Save to database
       const prompt = await prisma.prompt.create({
         data: {
           userId,

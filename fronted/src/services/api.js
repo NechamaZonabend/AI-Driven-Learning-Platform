@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/api';
 
+// --- User API ---
+
 export const registerUser = async (userData) => {
     const response = await axios.post(`${API_URL}/users/register`, userData);
     return response.data;
@@ -32,7 +34,6 @@ export const getCategoryByNane = async (name) => {
 // --- SubCategory API ---
 
 export const getAllSubCategories = async (categoryId) => {
-    // אם רוצים לשלוף לפי קטגוריה מסוימת
     const url = categoryId
         ? `${API_URL}/sub-categories?categoryId=${categoryId}`
         : `${API_URL}/sub-categories`;
@@ -53,9 +54,9 @@ export const getSubCategoryById = async (subCategoryId) => {
 export const deleteSubCategory = async (subCategoryId) => {
     const response = await axios.delete(`${API_URL}/sub-categories/${subCategoryId}`);
     return response.data;
-}
-// --- Prompt API ---
+};
 
+// --- Prompt API ---
 
 export const createPrompt = async (promptData) => {
     const response = await axios.post(`${API_URL}/prompts`, promptData);
@@ -63,8 +64,19 @@ export const createPrompt = async (promptData) => {
 };
 
 export const getAllPrompts = async (userId) => {
+    if (!userId) throw new Error('userId is required');
     const response = await axios.get(`${API_URL}/prompts/user/${userId}`);
     return response.data;
 };
 
+// --- Admin API ---
 
+export const getAllUsers = async () => {
+    const response = await axios.get(`${API_URL}/users/users`);
+    return response.data;
+};
+
+export const getAllPromptsAdmin = async () => {
+    const response = await axios.get(`${API_URL}/prompts`);
+    return response.data;
+};

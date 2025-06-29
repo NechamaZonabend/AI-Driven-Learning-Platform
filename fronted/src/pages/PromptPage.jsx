@@ -1,7 +1,6 @@
-  import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAllCategories, getAllSubCategories, createPrompt, getAllPrompts } from '../services/api';
-
-const USER_ID = 1; // שים כאן את ה־userId של המשתמש המחובר
+import '../App.css';
 
 const PromptPage = () => {
   const [categories, setCategories] = useState([]);
@@ -31,8 +30,15 @@ const PromptPage = () => {
     setLoading(true);
     setResponse('');
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user?.id;
+      if (!userId) {
+        setResponse('Error: User not logged in');
+        setLoading(false);
+        return;
+      }
       const res = await createPrompt({
-        userId: USER_ID,
+        userId,
         categoryId: Number(categoryId),
         subCategoryId: Number(subCategoryId),
         prompt
@@ -44,19 +50,38 @@ const PromptPage = () => {
     setLoading(false);
   };
 
+  // Fetch prompt history and handle nested data structure
   const handleShowHistory = async () => {
-    if (!showHistory) {
-      const res = await getAllPrompts(USER_ID);
-      setHistory(res.data?.data || res.data || []);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.id;
+    if (!userId) {
+      setHistory([]);
+      setShowHistory(true);
+      return;
     }
-    setShowHistory(!showHistory);
+    try {
+      const data = await getAllPrompts(userId);
+      // Handle nested data.data.data
+      let arr = [];
+      if (Array.isArray(data?.data?.data)) {
+        arr = data.data.data;
+      } else if (Array.isArray(data?.data)) {
+        arr = data.data;
+      } else if (Array.isArray(data)) {
+        arr = data;
+      }
+      setHistory(arr);
+      setShowHistory(true);
+    } catch (err) {
+      setHistory([]);
+      setShowHistory(true);
+    }
   };
 
   return (
     <div>
       <h2>Ask a Prompt</h2>
       <form onSubmit={handleSubmit}>
-        {/* ...קטגוריות, תת קטגוריות, פרומפט... */}
         <div>
           <label>Category:</label>
           <select value={categoryId} onChange={e => setCategoryId(e.target.value)} required>
@@ -81,33 +106,34 @@ const PromptPage = () => {
         </div>
         <button type="submit" disabled={loading}>{loading ? 'Loading...' : 'Send'}</button>
       </form>
+      <button style={{ marginTop: '1rem' }} onClick={handleShowHistory}>
+        Show History
+      </button>
+      {showHistory && (
+        <div>
+          <h3>Your Prompt History</h3>
+          {Array.isArray(history) && history.length === 0 ? (
+            <div>No previous prompts found.</div>
+          ) : (
+            <ul>
+              {Array.isArray(history) && history.map(item => (
+                <li key={item.id}>
+                  <strong>Prompt:</strong> {item.prompt}<br />
+                  <strong>Response:</strong> {item.response}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       {response && (
         <div>
           <h3>Response:</h3>
           <pre>{response}</pre>
         </div>
       )}
-
-      <button onClick={handleShowHistory} style={{ marginTop: '20px' }}>
-        {showHistory ? 'Hide' : 'Show'} My Prompt History
-      </button>
-      {showHistory && (
-        <div>
-          <h3>My Prompt History</h3>
-          {history.length === 0 && <div>No history found.</div>}
-          <ul>
-            {history.map((item) => (
-              <li key={item.id}>
-                <strong>Prompt:</strong> {item.prompt}<br />
-                <strong>Response:</strong> <pre>{item.response}</pre>
-                <hr />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
 
-export default PromptPage;   
+export default PromptPage;

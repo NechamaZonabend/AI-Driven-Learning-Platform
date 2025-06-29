@@ -11,15 +11,15 @@ export const createSubCategory = async (req: Request, res: Response) => {
   }
 };
 
-export const getSubCategoryById = async (req: Request, res: Response) => {
-  try {
-    const subCategoryId = Number(req.params.subCategoryId);
-    const subCategory = await subCategoryService.getSubCategoryById(subCategoryId);
-    res.json({ success: true, data: subCategory });
-  } catch (error: any) {
-    res.status(404).json({ success: false, message: error.message || 'Sub-category not found' });
-  }
-};
+// export const getSubCategoryById = async (req: Request, res: Response) => {
+//   try {
+//     const subCategoryId = Number(req.params.subCategoryId);
+//     const subCategory = await subCategoryService.getSubCategoryById(subCategoryId);
+//     res.json({ success: true, data: subCategory });
+//   } catch (error: any) {
+//     res.status(404).json({ success: false, message: error.message || 'Sub-category not found' });
+//   }
+// };
 
 export const getAllSubCategories = async (req: Request, res: Response) => {
   try {
@@ -31,19 +31,19 @@ export const getAllSubCategories = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteSubCategory = async (req: Request, res: Response) => {
-  try {
-    const subCategoryId = Number(req.params.subCategoryId);
-    const result = await subCategoryService.deleteSubCategory(subCategoryId);
-    res.json({ success: true, data: result });
-  } catch (error: any) {
-    res.status(404).json({ success: false, message: error.message || 'Failed to delete sub-category' });
-  }
-};
+// export const deleteSubCategory = async (req: Request, res: Response) => {
+//   try {
+//     const subCategoryId = Number(req.params.subCategoryId);
+//     const result = await subCategoryService.deleteSubCategory(subCategoryId);
+//     res.json({ success: true, data: result });
+//   } catch (error: any) {
+//     res.status(404).json({ success: false, message: error.message || 'Failed to delete sub-category' });
+//   }
+// };
 
 export default {
   createSubCategory,
-  getSubCategoryById,
+  // getSubCategoryById,
     getAllSubCategories,
-  deleteSubCategory,
+  // deleteSubCategory,
 };

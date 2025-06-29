@@ -1,7 +1,8 @@
-// דוגמה ב-App.jsx
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import PromptPage from './pages/PromptPage';
+import HomePage from '../src/pages/HomePage';
+import PromptPage from '../src/pages/PromptPage';
+import AdminPage from '../src/pages/AdminPage';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/prompt" element={<PromptPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   );
